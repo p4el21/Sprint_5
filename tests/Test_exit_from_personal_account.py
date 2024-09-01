@@ -1,18 +1,25 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from src.config import Config
+from src.locators import BurgerLocators
 
-driver = webdriver.Chrome()
-driver.get('https://stellarburgers.nomoreparties.site/')
+class TestExit:
+    def test_exit_from_personal_account(self, driver):
+        driver.get(Config.URL)
 
-driver.find_element(By.XPATH, '//button[contains(text(), "Войти в аккаунт")]').click()
-driver.find_element(By.XPATH, '//label[contains(text(), "Email")]/following-sibling::input').send_keys('evgeniyandreev10999@mail.ru')
-driver.find_element(By.XPATH, '//input[@type="password"]').send_keys('12345678')
-driver.find_element(By.XPATH, '//button[contains(text(), "Войти")]').click()
-driver.find_element(By.XPATH, "//a[@href='/account']").click()
-WebDriverWait(driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, '//ul[contains(@class, "Account_list")]')))
-driver.find_element(By.XPATH, '//button[contains(text(), "Выход")]').click()
-WebDriverWait(driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Войти")]')))
-assert driver.current_url == 'https://stellarburgers.nomoreparties.site/login'
-driver.quit()
+        driver.find_element(*BurgerLocators.LOGIN_TO_ACCOUNT_BUTTON).click()
+
+        driver.find_element(*BurgerLocators.EMAIL_FIELD).send_keys(Config.EMAIL)
+        driver.find_element(*BurgerLocators.PASSWORD_FIELD).send_keys(Config.PASSWORD)
+        driver.find_element(*BurgerLocators.LOGIN_BUTTON).click()
+
+        driver.find_element(*BurgerLocators.PERSONAL_ACCOUNT_BUTTON).click()
+
+        WebDriverWait(driver, Config.TIMEOUT).until(expected_conditions.visibility_of_element_located(BurgerLocators.ACCOUNT_LIST))
+
+        driver.find_element(*BurgerLocators.LOGOUT_BUTTON).click()
+
+        WebDriverWait(driver, Config.TIMEOUT).until(expected_conditions.visibility_of_element_located(BurgerLocators.LOGIN_BUTTON))
+
+        assert driver.current_url == 'https://stellarburgers.nomoreparties.site/login'
+

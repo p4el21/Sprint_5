@@ -1,26 +1,26 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from src.config import Config
+from src.locators import BurgerLocators
 
-driver = webdriver.Chrome()
-driver.get('https://stellarburgers.nomoreparties.site/')
+class TestRegistration:
+    def test_successful_registration(self, driver):
+        driver.get(Config.URL)
+        driver.find_element(*BurgerLocators.LOGIN_TO_ACCOUNT_BUTTON).click()
+        driver.find_element(*BurgerLocators.REGISTRATION_LINK).click()
 
-driver.find_element(By.XPATH, '//*[contains(@class, "button_button")]').click()
-driver.find_element(By.LINK_TEXT, 'Зарегистрироваться').click()
+        driver.find_element(*BurgerLocators.NAME_FIELD).send_keys(Config.NAME)
+        driver.find_element(*BurgerLocators.EMAIL_FIELD).send_keys(Config.EMAIL)
+        driver.find_element(*BurgerLocators.PASSWORD_FIELD).send_keys(Config.PASSWORD)
+        driver.find_element(*BurgerLocators.REGISTRATION_BUTTON).click()
 
-driver.find_element(By.XPATH, '//label[contains(text(), "Имя")]/following-sibling::input').send_keys('Евгений')
-driver.find_element(By.XPATH, '//label[contains(text(), "Email")]/following-sibling::input').send_keys('evgeniyandreev10999@mail.ru')
-driver.find_element(By.XPATH, '//input[@type="password"]').send_keys('12345678')
-driver.find_element(By.XPATH, '//button[contains(text(), "Зарегистрироваться")]').click()
+        WebDriverWait(driver, Config.TIMEOUT).until(expected_conditions.visibility_of_element_located(BurgerLocators.LOGIN_BUTTON))
 
-WebDriverWait(driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Войти")]')))
+        driver.find_element(*BurgerLocators.EMAIL_FIELD).send_keys(Config.EMAIL)
+        driver.find_element(*BurgerLocators.PASSWORD_FIELD).send_keys(Config.PASSWORD)
+        driver.find_element(*BurgerLocators.LOGIN_BUTTON).click()
 
-driver.find_element(By.XPATH, '//label[contains(text(), "Email")]/following-sibling::input').send_keys('evgeniyandreev10999@mail.ru')
-driver.find_element(By.XPATH, '//input[@type="password"]').send_keys('12345678')
-driver.find_element(By.XPATH, '//button[contains(text(), "Войти")]').click()
+        WebDriverWait(driver, Config.TIMEOUT).until(expected_conditions.visibility_of_element_located(BurgerLocators.ORDER_BUTTON))
 
-WebDriverWait(driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Оформить заказ")]')))
+        assert driver.current_url == 'https://stellarburgers.nomoreparties.site/'
 
-assert driver.current_url == 'https://stellarburgers.nomoreparties.site/'
-driver.quit()

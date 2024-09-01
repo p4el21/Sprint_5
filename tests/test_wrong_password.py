@@ -1,17 +1,16 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from src.config import Config
+from src.locators import BurgerLocators
 
-driver = webdriver.Chrome()
-driver.get('https://stellarburgers.nomoreparties.site/')
+class TestWrongPassword:
+    def test_wrong_password(self, driver):
+        driver.get(Config.URL)
 
-driver.find_element(By.XPATH, '//*[contains(@class, "button_button")]').click()
-driver.find_element(By.LINK_TEXT, 'Зарегистрироваться').click()
+        driver.find_element(*BurgerLocators.LOGIN_TO_ACCOUNT_BUTTON).click()
+        driver.find_element(*BurgerLocators.REGISTRATION_LINK).click()
+        driver.find_element(*BurgerLocators.NAME_FIELD).send_keys(Config.NAME)
+        driver.find_element(*BurgerLocators.EMAIL_FIELD).send_keys(Config.EMAIL)
 
-driver.find_element(By.XPATH, '//label[contains(text(), "Имя")]/following-sibling::input').send_keys('Евгений')
-driver.find_element(By.XPATH, '//label[contains(text(), "Email")]/following-sibling::input').send_keys('evgeniyandreev10999@mail.ru')
-driver.find_element(By.XPATH, '//input[@type="password"]').send_keys('12345')
-driver.find_element(By.XPATH, '//button[contains(text(), "Зарегистрироваться")]').click()
+        driver.find_element(*BurgerLocators.PASSWORD_FIELD).send_keys(Config.WRONG_PASSWORD)
+        driver.find_element(*BurgerLocators.REGISTRATION_BUTTON).click()
 
-assert driver.find_element(By.CLASS_NAME, "input__error").text == 'Некорректный пароль'
-
-driver.quit()
+        assert driver.find_element(*BurgerLocators.ERROR_INPUT).text == 'Некорректный пароль'

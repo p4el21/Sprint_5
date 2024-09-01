@@ -1,11 +1,11 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from src.config import Config
+from src.locators import BurgerLocators
 
-driver = webdriver.Chrome()
-driver.get('https://stellarburgers.nomoreparties.site/')
+class TestRecovery:
+    def test_successfully_login_from_password_recovery(self, driver):
+        driver.get(Config.URL)
 
-driver.find_element(By.XPATH, '//*[contains(@class, "button_button")]').click()
-driver.find_element(By.XPATH, "//a[@href='/forgot-password']").click()
+        driver.find_element(*BurgerLocators.LOGIN_TO_ACCOUNT_BUTTON).click()
+        driver.find_element(*BurgerLocators.FORGOT_PASSWORD_LINK).click()
 
-assert driver.current_url == 'https://stellarburgers.nomoreparties.site/forgot-password'
-driver.quit()
+        assert driver.current_url == 'https://stellarburgers.nomoreparties.site/forgot-password'
