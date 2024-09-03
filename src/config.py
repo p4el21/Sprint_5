@@ -1,7 +1,9 @@
 class Config:
-    URL = 'https://stellarburgers.nomoreparties.site/'
+    URL = 'https://stellarburgers.nomoreparties.site'
     TIMEOUT = 2
+
+class TestData:
     NAME = 'Евгений'
-    EMAIL = 'evgeniyandreev10888@mail.ru'
+    EMAIL = 'evgeniyandreev10666@mail.ru'
     PASSWORD = '12345678'
     WRONG_PASSWORD = '12345'

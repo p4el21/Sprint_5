@@ -21,4 +21,6 @@ class BurgerLocators:
     BUNS_TEXT = By.XPATH, '//span[contains(text(), "Булки")]'
     FILLINGS_TEXT = By.XPATH, '//span[contains(text(), "Начинки")]'
     SAUCES_TEXT = By.XPATH, '//span[contains(text(), "Соусы")]'
-    ACTIVE_LINE = By.CSS_SELECTOR, '[class*="tab_tab_type_current"]'
+    ACTIVE_LINE = By.XPATH, '//span[contains(text(), "Булки")]/parent::div[contains(@class, "tab_tab_type_current")]'
+    ACTIVE_LINE1 = By.XPATH, '//span[contains(text(), "Начинки")]/parent::div[contains(@class, "tab_tab_type_current")]'
+    ACTIVE_LINE2 = By.XPATH, '//span[contains(text(), "Соусы")]/parent::div[contains(@class, "tab_tab_type_current")]'

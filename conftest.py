@@ -1,8 +1,7 @@
+from random import random
+import random
 import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 from src.config import Config
 
 def browser_settings():
@@ -20,3 +19,11 @@ def driver():
     yield chrome
     chrome.quit()
 
+@pytest.fixture
+def generate_data():
+    data = 'evgeniyandreev10'
+    domain = 'yandex.com'
+    numbers = random.randint(100, 999)
+    email = f'{data}{numbers}@{domain}'
+    password = random.randint(100000, 999999)
+    return email, password
